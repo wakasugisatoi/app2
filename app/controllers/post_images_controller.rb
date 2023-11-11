@@ -1,4 +1,5 @@
 class PostImagesController < ApplicationController
+  
   def new
     @post_image = PostImage.new
   end
@@ -6,16 +7,20 @@ class PostImagesController < ApplicationController
   def create
     @post_image = PostImage.new(post_image_params)
     @post_image.user_id = current_user.id
-    @post_image.save
-    redirect_to post_images_path
+    if @post_image.save
+      redirect_to post_images_path
+    else 
+      render :new
+    end 
   end
   
   def index
-    @post_images = PostImage.all
+    @post_images = PostImage.page(params[:page])
   end
 
   def show
     @post_image = PostImage.find(params[:id])
+    @post_comment = PostComment.new
   end
   
   def destroy
@@ -23,8 +28,10 @@ class PostImagesController < ApplicationController
     post_image.destroy
     redirect_to '/post_images'
   end 
-  
-  private
+
+
+  # ストロングパラメーターの記述
+  private   #ここから下はcontrollerの中でしか呼びません
   
   def post_image_params
     params.require(:post_image).permit(:shop_name, :image, :caption)
