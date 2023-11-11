@@ -20,26 +20,12 @@
             <%= link_to "削除", post_image_path(@post_image), method: :delete %>
           <% end %>
         </div>
-        <div class="card-text">
-          <% @post_image.post_comments.each do |post_comment| %>
-            <div class="comment">
-              <span><%= image_tag post_comment.user.get_profile_image(50,50) %></span>
-              <span><%= post_comment.user.name %></span>
-              <span><%= post_comment.created_at.strftime('%Y/%m/%d') %><%= post_comment.comment %></span>
-              <span>
-               <% if post_comment.user == current_user %>
-                 <%= link_to "削除", post_image_post_comment_path(post_comment.post_image,post_comment), method: :delete %>
-               <% end %> 
-              </span>
-            </div>
-          <% end %>
+        <div id="comment_index", class="card-text">
+          <%= render 'post_comments/index', post_image: @post_image %>
         </div>
         <div class="form-group mt-2">
           <p>コメントする</p>
-          <%= form_with model: [@post_image, @post_comment] do |f| %>
-            <%= f.text_area :comment, cols: "40", placeholder: "コメントをここに" %><br>
-            <%= f.submit "送信する", class: "btn btn-primary mt-2" %>
-          <% end %>
+          <%= render 'post_comments/form', post_image: @post_image, post_comment: @post_comment %>
         </div>
       </div>
     </div>
