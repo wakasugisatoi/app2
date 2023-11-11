@@ -1,1 +1,3 @@
-<%= post_image.post_comments.count %> コメント
+<%= link_to post_image_path(post_image.id) do %>
+ コメント <%= post_image.post_comments.count %>
+<% end %>
